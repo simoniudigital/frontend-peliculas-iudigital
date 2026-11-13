@@ -2,7 +2,7 @@
 
 Aplicación web en **ReactJS** para administrar el catálogo de películas y series del caso de estudio *"Aplicación web de películas en modo Administrador"* del curso **Proyecto Integrado II – Desarrollo de Aplicaciones Web** (Evidencia de Aprendizaje 2).
 
-La aplicación consume la API REST construida en la EA1 ([api-peliculas](../api-peliculas)) y tiene una pantalla por cada módulo del caso: **Género, Director, Productora, Tipo y Media (películas y series)**. En todas se puede **crear, listar, buscar, editar y eliminar** registros, y en los módulos con estado también activarlos o inactivarlos.
+La aplicación consume la API REST construida en la EA1 (proyecto `api-peliculas`) y tiene una pantalla por cada módulo del caso: **Género, Director, Productora, Tipo y Media (películas y series)**. En todas se puede **crear, listar, buscar, editar y eliminar** registros, y en los módulos con estado también activarlos o inactivarlos.
 
 ![Películas y series](docs/02-medias.jpg)
 
