@@ -1,0 +1,48 @@
+:root {
+  --iu-rojo: #c8102e;
+}
+body {
+  background: #f4f5f7;
+  min-height: 100vh;
+}
+.navbar-brand .bi {
+  color: var(--iu-rojo);
+}
+.btn-iu {
+  --bs-btn-bg: var(--iu-rojo);
+  --bs-btn-border-color: var(--iu-rojo);
+  --bs-btn-hover-bg: #a00d25;
+  --bs-btn-hover-border-color: #a00d25;
+  --bs-btn-active-bg: #8a0b20;
+  --bs-btn-color: #fff;
+  --bs-btn-hover-color: #fff;
+}
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+.media-card img {
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  background: #dee2e6;
+}
+.media-card .card-title {
+  font-size: 1rem;
+}
+.modal-backdrop-custom {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1050;
+}
+.modal.d-block {
+  z-index: 1055;
+}
+.table td,
+.table th {
+  vertical-align: middle;
+}
