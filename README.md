@@ -2,7 +2,7 @@
 
 Aplicación web en **ReactJS** para administrar el catálogo de películas y series del caso de estudio *"Aplicación web de películas en modo Administrador"* del curso **Proyecto Integrado II – Desarrollo de Aplicaciones Web** (Evidencia de Aprendizaje 2).
 
-La aplicación consume la API REST construida en la EA1 (proyecto `api-peliculas`) y tiene una pantalla por cada módulo del caso: **Género, Director, Productora, Tipo y Media (películas y series)**. En todas se puede **crear, listar, buscar, editar y eliminar** registros, y en los módulos con estado también activarlos o inactivarlos.
+La aplicación consume la API REST construida en la EA1 ([api-peliculas-iudigital](https://github.com/simoniudigital/api-peliculas-iudigital)) y tiene una pantalla por cada módulo del caso: **Género, Director, Productora, Tipo y Media (películas y series)**. En todas se puede **crear, listar, buscar, editar y eliminar** registros, y en los módulos con estado también activarlos o inactivarlos.
 
 ![Películas y series](docs/02-medias.jpg)
 
@@ -68,12 +68,14 @@ Requisitos: Node.js 20.19 o superior y la API de la EA1 en ejecución.
 
 1. Levantar la API (proyecto `api-peliculas`):
    ```bash
+   git clone https://github.com/simoniudigital/api-peliculas-iudigital.git api-peliculas
    cd api-peliculas
    npm install
    npm run dev:memory     # o npm start con MONGO_URI configurado en .env
    ```
 2. Levantar el frontend:
    ```bash
+   git clone https://github.com/simoniudigital/frontend-peliculas-iudigital.git frontend-peliculas
    cd frontend-peliculas
    npm install
    cp .env.example .env   # opcional: cambiar VITE_API_URL si la API no está en http://localhost:4000/api
