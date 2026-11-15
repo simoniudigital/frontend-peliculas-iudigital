@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import InicioPage from './pages/InicioPage';
 import MediaPage from './pages/MediaPage';
@@ -8,11 +8,14 @@ import ProductoraPage from './pages/ProductoraPage';
 import TipoPage from './pages/TipoPage';
 
 export default function App() {
+  const location = useLocation();
+
   return (
     <>
       <Navbar />
-      <main>
-        <Routes>
+      {/* La clave por ruta reinicia la animación de entrada en cada cambio de pantalla */}
+      <main key={location.pathname} className="pagina-animada">
+        <Routes location={location}>
           <Route path="/" element={<InicioPage />} />
           <Route path="/medias" element={<MediaPage />} />
           <Route path="/generos" element={<GeneroPage />} />

@@ -17,6 +17,12 @@ export default function MediaPage() {
   const [generos, setGeneros] = useState([]);
   const [modal, setModal] = useState({ abierto: false, media: null });
   const [guardando, setGuardando] = useState(false);
+  const [destacadoId, setDestacadoId] = useState(null); // tarjeta recién creada o modificada
+
+  const destacar = (id) => {
+    setDestacadoId(id);
+    setTimeout(() => setDestacadoId((actual) => (actual === id ? null : actual)), 1900);
+  };
 
   const cargar = async () => {
     setCargando(true);
@@ -53,9 +59,11 @@ export default function MediaPage() {
     try {
       if (modal.media) {
         await mediaService.actualizar(modal.media._id, datos);
+        destacar(modal.media._id);
         alertaExito('Producción actualizada');
       } else {
-        await mediaService.crear(datos);
+        const data = await mediaService.crear(datos);
+        destacar(data.media._id);
         alertaExito('Producción creada');
       }
       setModal({ abierto: false, media: null });
@@ -113,13 +121,15 @@ export default function MediaPage() {
       {cargando ? (
         <Cargando />
       ) : medias.length === 0 ? (
-        <p className="text-center text-muted py-5">No hay películas ni series registradas.</p>
+        <p className="text-center text-muted py-5 estado-vacio">No hay películas ni series registradas.</p>
       ) : (
         <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3">
-          {medias.map((m) => (
-            <div className="col" key={m._id}>
-              <div className="card h-100 shadow-sm media-card">
+          {medias.map((m, i) => (
+            <div className="col entrada-escalonada" key={m._id} style={{ '--i': Math.min(i, 12) }}>
+              <div className={`card h-100 shadow-sm media-card ${destacadoId === m._id ? 'destacada' : ''}`}>
+                <div className="portada">
                 <img src={m.imagenPortada || PORTADA_DEFECTO} onError={(e) => (e.currentTarget.src = PORTADA_DEFECTO)} className="card-img-top" alt={`Portada de ${m.titulo}`} />
+                </div>
                 <div className="card-body d-flex flex-column">
                   <div className="d-flex justify-content-between align-items-start gap-1 mb-1">
                     <span className="badge text-bg-dark">{m.tipo?.nombre}</span>

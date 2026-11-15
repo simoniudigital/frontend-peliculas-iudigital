@@ -31,6 +31,12 @@ export default function CrudCatalogo({ titulo, singular, icono, servicio, claveL
   const [editandoId, setEditandoId] = useState(null);
   const [formulario, setFormulario] = useState(formularioVacio);
   const [guardando, setGuardando] = useState(false);
+  const [destacadoId, setDestacadoId] = useState(null); // fila recién creada o modificada
+
+  const destacar = (id) => {
+    setDestacadoId(id);
+    setTimeout(() => setDestacadoId((actual) => (actual === id ? null : actual)), 1700);
+  };
 
   const cargar = async () => {
     setCargando(true);
@@ -69,9 +75,12 @@ export default function CrudCatalogo({ titulo, singular, icono, servicio, claveL
     try {
       if (editandoId) {
         await servicio.actualizar(editandoId, formulario);
+        destacar(editandoId);
         alertaExito(`${singular} actualizado(a)`);
       } else {
-        await servicio.crear(formulario);
+        const data = await servicio.crear(formulario);
+        const nuevo = Object.values(data).find((v) => v && v._id);
+        if (nuevo) destacar(nuevo._id);
         alertaExito(`${singular} creado(a)`);
       }
       setModalAbierto(false);
@@ -87,6 +96,7 @@ export default function CrudCatalogo({ titulo, singular, icono, servicio, claveL
     const estado = registro.estado === 'Activo' ? 'Inactivo' : 'Activo';
     try {
       await servicio.actualizar(registro._id, { estado });
+      destacar(registro._id);
       alertaExito(`${singular} ${estado === 'Activo' ? 'activado(a)' : 'inactivado(a)'}`);
       cargar();
     } catch (error) {
@@ -139,7 +149,7 @@ export default function CrudCatalogo({ titulo, singular, icono, servicio, claveL
           {cargando ? (
             <Cargando />
           ) : filtrados.length === 0 ? (
-            <p className="text-center text-muted py-4 mb-0">No hay registros para mostrar.</p>
+            <p className="text-center text-muted py-4 mb-0 estado-vacio">No hay registros para mostrar.</p>
           ) : (
             <div className="table-responsive">
               <table className="table table-hover mb-0">
@@ -155,8 +165,8 @@ export default function CrudCatalogo({ titulo, singular, icono, servicio, claveL
                   </tr>
                 </thead>
                 <tbody>
-                  {filtrados.map((r) => (
-                    <tr key={r._id}>
+                  {filtrados.map((r, i) => (
+                    <tr key={r._id} className={`entrada-escalonada ${destacadoId === r._id ? 'fila-destacada' : ''}`} style={{ '--i': Math.min(i, 12) }}>
                       {campos.map((c) => (
                         <td key={c.nombre} className={c.nombre === campoNombre ? 'fw-semibold' : 'text-muted small'}>
                           {r[c.nombre]}

@@ -96,7 +96,7 @@ export default function MediaForm({ media, onGuardar, onCancelar, guardando }) {
           <label className="form-label" htmlFor="imagenPortada">Imagen o foto de portada (URL)</label>
           <div className="d-flex gap-3 align-items-start">
             <input id="imagenPortada" name="imagenPortada" type="url" className="form-control" value={formulario.imagenPortada} onChange={cambiar} placeholder="https://..." />
-            {formulario.imagenPortada && <img src={formulario.imagenPortada} alt="Vista previa" style={{ width: 60, height: 90, objectFit: 'cover' }} className="rounded border" />}
+            {formulario.imagenPortada && <img key={formulario.imagenPortada} src={formulario.imagenPortada} alt="Vista previa" style={{ width: 60, height: 90, objectFit: 'cover' }} className="rounded border vista-previa" />}
           </div>
         </div>
         {select('genero', 'Género principal', conActual(opciones.generos, 'genero', 'nombre'), 'nombre')}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { directorService, generoService, mediaService, productoraService, tipoService } from '../services/api';
 
@@ -9,6 +9,33 @@ const modulos = [
   { to: '/productoras', titulo: 'Productoras', icono: 'bi-building', servicio: productoraService, clave: 'productoras', texto: 'Disney, Warner, Paramount, MGM...' },
   { to: '/tipos', titulo: 'Tipos', icono: 'bi-collection-play', servicio: tipoService, clave: 'tipos', texto: 'Película, serie y otros tipos de multimedia.' },
 ];
+
+// Número que cuenta desde 0 hasta el valor final
+function Contador({ valor }) {
+  const [mostrado, setMostrado] = useState(0);
+  const inicio = useRef(null);
+
+  useEffect(() => {
+    if (valor === undefined) return undefined;
+    const reducir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducir || valor === 0) {
+      setMostrado(valor);
+      return undefined;
+    }
+    let frame;
+    inicio.current = null;
+    const paso = (t) => {
+      if (inicio.current === null) inicio.current = t;
+      const progreso = Math.min((t - inicio.current) / 700, 1);
+      setMostrado(Math.round(valor * (1 - Math.pow(1 - progreso, 3))));
+      if (progreso < 1) frame = requestAnimationFrame(paso);
+    };
+    frame = requestAnimationFrame(paso);
+    return () => cancelAnimationFrame(frame);
+  }, [valor]);
+
+  return valor === undefined ? '—' : mostrado;
+}
 
 export default function InicioPage() {
   const [totales, setTotales] = useState({});
@@ -37,16 +64,17 @@ export default function InicioPage() {
       )}
 
       <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
-        {modulos.map((m) => (
-          <div className="col" key={m.to}>
-            <Link to={m.to} className="card h-100 shadow-sm text-decoration-none text-reset">
-              <div className="card-body d-flex align-items-center gap-3">
+        {modulos.map((m, i) => (
+          <div className="col entrada-escalonada" key={m.to} style={{ '--i': i }}>
+            <Link to={m.to} className="card h-100 shadow-sm text-decoration-none text-reset tarjeta-modulo">
+              <div className="card-body d-flex align-items-center gap-3 position-relative">
                 <i className={`bi ${m.icono} fs-1 text-danger`} />
                 <div>
                   <h2 className="h5 mb-1">{m.titulo}</h2>
                   <p className="small text-muted mb-1">{m.texto}</p>
-                  <span className="badge text-bg-light border">{totales[m.clave] ?? '—'} registros</span>
+                  <span className="badge text-bg-light border"><Contador valor={totales[m.clave]} /> registros</span>
                 </div>
+                <i className="bi bi-arrow-right flecha text-danger" aria-hidden="true" />
               </div>
             </Link>
           </div>

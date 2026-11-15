@@ -1,0 +1,263 @@
+/* Animaciones y microinteracciones de la aplicación.
+   Solo agregan movimiento y respuesta visual: no cambian la distribución de las pantallas. */
+
+:root {
+  --ease-salida: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-rebote: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --rapido: 160ms;
+  --medio: 280ms;
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes aparecer-arriba {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes aparecer {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes desaparecer {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes modal-entrar {
+  from { opacity: 0; transform: translateY(-16px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes modal-salir {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translateY(-10px) scale(0.98); }
+}
+@keyframes destello {
+  0% { background-color: rgba(200, 16, 46, 0.16); }
+  100% { background-color: transparent; }
+}
+@keyframes destello-borde {
+  0% { box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.55), 0 0.5rem 1rem rgba(0, 0, 0, 0.12); }
+  100% { box-shadow: 0 0 0 0 rgba(200, 16, 46, 0), 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); }
+}
+@keyframes rebote-pequeno {
+  0% { transform: scale(0.6); opacity: 0; }
+  70% { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); }
+}
+@keyframes latido {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18); }
+}
+@keyframes sacudir {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-12deg); }
+  75% { transform: rotate(12deg); }
+}
+
+/* ---------- Transición entre pantallas ---------- */
+/* "backwards" (y no "both"): al terminar no deja transform aplicado, porque un transform
+   en este contenedor encerraría los elementos position: fixed (como el fondo del modal). */
+.pagina-animada {
+  animation: aparecer-arriba var(--medio) var(--ease-salida) backwards;
+}
+
+/* ---------- Barra de navegación ---------- */
+.navbar .nav-link {
+  position: relative;
+  transition: color var(--rapido) ease;
+}
+.navbar .nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0.5rem;
+  right: 0.5rem;
+  bottom: 0.25rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--iu-rojo);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform var(--medio) var(--ease-salida);
+}
+.navbar .nav-link:hover::after,
+.navbar .nav-link.active::after {
+  transform: scaleX(1);
+}
+.navbar .nav-link .bi {
+  display: inline-block;
+  transition: transform var(--medio) var(--ease-rebote);
+}
+.navbar .nav-link:hover .bi {
+  transform: translateY(-2px) scale(1.12);
+}
+.navbar-brand .bi {
+  display: inline-block;
+  transition: transform var(--medio) var(--ease-rebote);
+}
+.navbar-brand:hover .bi {
+  animation: latido 700ms ease-in-out;
+}
+.navbar-collapse.show {
+  animation: aparecer-arriba var(--medio) var(--ease-salida);
+}
+
+/* ---------- Botones ---------- */
+.btn {
+  transition: color var(--rapido) ease, background-color var(--rapido) ease, border-color var(--rapido) ease,
+    box-shadow var(--rapido) ease, transform var(--rapido) var(--ease-salida);
+}
+.btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+.btn-iu:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 0.4rem 0.9rem rgba(200, 16, 46, 0.3);
+}
+.btn-iu .bi-plus-lg {
+  display: inline-block;
+  transition: transform var(--medio) var(--ease-rebote);
+}
+.btn-iu:hover .bi-plus-lg {
+  transform: rotate(90deg);
+}
+.btn-sm .bi {
+  display: inline-block;
+  transition: transform var(--rapido) var(--ease-rebote);
+}
+.btn-sm:hover .bi {
+  transform: scale(1.2);
+}
+.btn-outline-danger:hover .bi-trash {
+  animation: sacudir 360ms ease-in-out;
+}
+.btn-outline-primary:hover .bi-pencil {
+  transform: rotate(-15deg) scale(1.2);
+}
+
+/* ---------- Campos de formulario ---------- */
+.form-control,
+.form-select {
+  transition: border-color var(--rapido) ease, box-shadow var(--medio) ease, background-color var(--rapido) ease;
+}
+.form-control:hover:not(:focus),
+.form-select:hover:not(:focus) {
+  border-color: #adb5bd;
+}
+.form-control:focus,
+.form-select:focus {
+  border-color: rgba(200, 16, 46, 0.55);
+  box-shadow: 0 0 0 0.25rem rgba(200, 16, 46, 0.15);
+}
+
+/* ---------- Tarjetas y tablas ---------- */
+.card {
+  transition: transform var(--medio) var(--ease-salida), box-shadow var(--medio) ease;
+}
+.entrada-escalonada {
+  animation: aparecer-arriba 420ms var(--ease-salida) both;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+.table-hover > tbody > tr {
+  transition: background-color var(--rapido) ease;
+}
+.table-hover > tbody > tr > td {
+  transition: background-color var(--rapido) ease;
+}
+.fila-destacada > td {
+  animation: destello 1.6s ease-out;
+}
+
+/* Insignia de estado: rebota al cambiar */
+.badge-estado {
+  display: inline-block;
+  animation: rebote-pequeno 420ms var(--ease-rebote);
+}
+
+/* Tarjetas de películas y series */
+.media-card {
+  overflow: hidden;
+}
+.media-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0.9rem 1.8rem rgba(0, 0, 0, 0.16) !important;
+}
+.media-card .portada {
+  overflow: hidden;
+}
+.media-card .portada img {
+  transition: transform 600ms var(--ease-salida), filter var(--medio) ease;
+}
+.media-card:hover .portada img {
+  transform: scale(1.06);
+  filter: brightness(1.05);
+}
+.media-card.destacada {
+  animation: destello-borde 1.8s ease-out;
+}
+
+/* Tarjetas de la pantalla de inicio */
+.tarjeta-modulo:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12) !important;
+}
+.tarjeta-modulo .bi {
+  display: inline-block;
+  transition: transform var(--medio) var(--ease-rebote);
+}
+.tarjeta-modulo:hover .bi {
+  transform: scale(1.15) rotate(-6deg);
+}
+.tarjeta-modulo .flecha {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  margin-top: -0.5em;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity var(--medio) ease, transform var(--medio) var(--ease-salida);
+}
+.tarjeta-modulo:hover .flecha {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ---------- Modal ---------- */
+.modal-backdrop-custom {
+  animation: aparecer var(--medio) ease both;
+}
+.modal.d-block .modal-dialog {
+  animation: modal-entrar var(--medio) var(--ease-salida) both;
+}
+.modal-cerrando .modal-backdrop-custom {
+  animation: desaparecer 180ms ease both;
+}
+.modal-cerrando .modal.d-block .modal-dialog {
+  animation: modal-salir 180ms ease both;
+}
+.modal .btn-close {
+  transition: transform var(--medio) var(--ease-rebote), opacity var(--rapido) ease;
+}
+.modal .btn-close:hover {
+  transform: rotate(90deg);
+}
+
+/* Vista previa de la portada en el formulario */
+.vista-previa {
+  animation: rebote-pequeno 360ms var(--ease-rebote);
+}
+
+/* ---------- Carga y estados vacíos ---------- */
+.cargando,
+.estado-vacio {
+  animation: aparecer 300ms ease both;
+}
+
+/* ---------- Accesibilidad: respetar "reducir movimiento" ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
