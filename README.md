@@ -6,6 +6,15 @@ La aplicación consume la API REST construida en la EA1 ([api-peliculas-iudigita
 
 ![Películas y series](docs/02-medias.jpg)
 
+## Despliegue en la nube (EA3)
+
+- **Aplicación en producción:** https://frontend-peliculas-iudigital-9eem.onrender.com
+- **API que consume:** https://api-peliculas-iudigital-lb66.onrender.com/api
+
+Publicada en **Render** como *Static Site* (gratuito): build `npm ci && npm run build`, carpeta de publicación `dist`, variable `VITE_API_URL` con la URL de la API y una regla *Rewrite* `/*` → `/index.html` para que las rutas de React Router funcionen al recargar.
+
+> La API usa el plan gratuito de Render: si estuvo inactiva, la primera carga puede tardar unos 50 segundos.
+
 ## Tecnologías
 
 | Librería | Uso |
